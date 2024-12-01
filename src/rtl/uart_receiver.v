@@ -1,5 +1,5 @@
 module uart_receiver (
-    input uart_samplig_clk,
+    input uart_sampling_clk,
     input reset,
 
     input RsRx,
@@ -17,7 +17,7 @@ module uart_receiver (
     //Note that sampling clock is already 16x of baudrate.
 
     //Hint : Refer to lab06 and 07 code to implement each state for FSM using case statement...
-    always @(posedge clk ) begin
+    always @(posedge uart_sampling_clk ) begin
         /* ... */
     end
 
