@@ -1,0 +1,124 @@
+# -----------------------------------------------------------------------------
+# OT_Final_Project - .gitignore
+# -----------------------------------------------------------------------------
+# This file specifies intentionally untracked files to ignore in Git for the
+# OT_Final_Project. It excludes Vivado-generated files, IP core artifacts,
+# OS-specific files, and other temporary or sensitive files.
+# -----------------------------------------------------------------------------
+
+# ===============================
+# Vivado Generated Files
+# ===============================
+
+# Logs and temporary files
+*.log
+*.jou
+*.str
+*.data
+*.cache/
+*.Xil/
+*.xise
+*.xco
+*.xo
+*.xsa
+*.xclbin
+
+# Runs and implementations
+.runs/
+.runs/*
+/runs
+
+# Synthesis and implementation directories
+.synth/
+.impl/
+
+# Project-specific Vivado files
+*.xpr
+*.lpr
+
+# Bitstream and binary files
+*.bit
+*.bin
+
+# Simulation outputs
+*.wdb
+*.vcd
+
+# -------------------------------
+# IP Core Generated Files
+# -------------------------------
+
+# IP cores and related generated files
+ip/*.srcs/
+ip/*.cache/
+ip/*.ip_user_files/
+
+# -------------------------------
+# Source and Constraint Files
+# -------------------------------
+
+# Ensure that your source files and constraints are tracked
+# These should NOT be ignored
+!src/
+!src/**/*.v
+!src/**/*.xdc
+
+# -------------------------------
+# Simulation Files
+# -------------------------------
+
+# Simulation outputs
+sim_build/
+sim_build/*
+
+# -------------------------------
+# Tcl Scripts and Configuration
+# -------------------------------
+
+# Ensure that your Tcl scripts are tracked
+!scripts/
+!scripts/*.tcl
+
+# -------------------------------
+# Documentation and Reports
+# -------------------------------
+
+# Ignore generated reports and documentation
+reports/
+reports/*
+
+# -------------------------------
+# Miscellaneous Temporary Files
+# -------------------------------
+
+# Temporary files and directories
+*.tmp
+*.temp
+*.bak
+*.backup
+*.swp
+*.swo
+
+# -------------------------------
+# OS-Specific Files
+# -------------------------------
+
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux specific files
+*~
+
+# -------------------------------
+# IDE and Editor Specific Files
+# -------------------------------
+
+# Visual Studio Code specific files
+.vscode/
+
+# -----------------------------------------------------------------------------
