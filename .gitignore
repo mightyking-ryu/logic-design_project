@@ -52,6 +52,7 @@
 ip/*.srcs/
 ip/*.cache/
 ip/*.ip_user_files/
+*.ip_user_files/
 
 # -------------------------------
 # Source and Constraint Files
@@ -70,6 +71,7 @@ ip/*.ip_user_files/
 # Simulation outputs
 sim_build/
 sim_build/*
+*.sim/
 
 # -------------------------------
 # Tcl Scripts and Configuration
