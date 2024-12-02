@@ -24,6 +24,8 @@ output md_end;
 
 	reg [7:0] pos;
 	reg next_md_end;
+	
+	integer i;
 
 	always @(posedge clk) begin
 		if(!rstn) begin
@@ -38,7 +40,8 @@ output md_end;
 
 	always @(*) begin
 		if(md_start) begin
-			integer i;
+			num_reg = num_in;
+			pos = 0;
 			for(i = 63; i >= 0; i = i - 1) begin
 				if(num_reg[i] == 1 && pos == 0) begin
 					pos = i + 1;
