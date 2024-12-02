@@ -24,6 +24,17 @@ output md_end;
 	reg [7:0] pos;
 	reg next_md_end;
 
+	wire [3:0] pos_1, pos_2, pos_3, pos_4, pos_5, pos_6, pos_7, pos_8;
+
+	get_length_8bit U1 (.num_in( num_in[7:0]   ), .len_out( pos_1 ));
+	get_length_8bit U2 (.num_in( num_in[15:8]  ), .len_out( pos_2 ));
+	get_length_8bit U3 (.num_in( num_in[23:16] ), .len_out( pos_3 ));
+	get_length_8bit U4 (.num_in( num_in[31:24] ), .len_out( pos_4 ));
+	get_length_8bit U5 (.num_in( num_in[39:32] ), .len_out( pos_5 ));
+	get_length_8bit U6 (.num_in( num_in[47:40] ), .len_out( pos_6 ));
+	get_length_8bit U7 (.num_in( num_in[55:48] ), .len_out( pos_7 ));
+	get_length_8bit U8 (.num_in( num_in[63:56] ), .len_out( pos_8 ));
+
 	always @(posedge clk) begin
 		if(!rstn) begin
 			len_reg <= 0;
@@ -37,7 +48,24 @@ output md_end;
 
 	always @(*) begin
 		if(md_start) begin
-
+			if(pos_8 != 0)
+				pos = pos_8 + 56;
+			else if(pos_7 != 0)
+				pos = pos_7 + 48;
+			else if(pos_6 != 0)
+				pos = pos_6 + 40;
+			else if(pos_5 != 0)
+				pos = pos_5 + 32;
+			else if(pos_4 != 0)
+				pos = pos_4 + 24;
+			else if(pos_3 != 0)
+				pos = pos_3 + 16;
+			else if(pos_2 != 0)
+				pos = pos_2 + 8;
+			else
+				pos = pos_1;
+			
+			next_md_end = 1;
 		end
 		else begin
 			pos = 0;
