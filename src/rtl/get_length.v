@@ -25,7 +25,7 @@ output md_end;
 	reg [7:0] pos;
 	reg next_md_end;
 	
-	integer i;
+	reg [7:0] i;
 
 	always @(posedge clk) begin
 		if(!rstn) begin
