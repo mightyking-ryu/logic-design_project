@@ -22,34 +22,33 @@ output md_end;
 	assign len_out = len_reg;
 	assign md_end = md_end_reg;
 
+	reg [7:0] pos;
+	reg next_md_end;
+
 	always @(posedge clk) begin
 		if(!rstn) begin
+			len_reg <= 0;
 			md_end_reg <= 0;
 		end
 		else begin
-			if(md_start) begin
-				num_reg <= num_in;
-				md_end_reg <= 1;
-			end
-			else begin
-				md_end_reg <= 0;
-			end
+			len_reg <= pos;
+			md_end_reg <= next_md_end;
 		end
 	end
 
 	always @(*) begin
-		if(md_end_reg) begin
+		if(md_start) begin
 			integer i;
-			integer pos = 0;
 			for(i = 63; i >= 0; i = i - 1) begin
-				if(num_reg[i] == 1) begin
+				if(num_reg[i] == 1 && pos == 0) begin
 					pos = i + 1;
 				end
 			end
-			len_reg = pos;
+			next_md_end = 1;
 		end
 		else begin
-			len_reg = 0;
+			pos = 0;
+			next_md_end = 0;
 		end
 	end
 
