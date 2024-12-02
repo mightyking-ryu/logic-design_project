@@ -28,6 +28,7 @@
 .runs/*
 /runs
 *.runs/
+*.srcs/
 
 # Synthesis and implementation directories
 .synth/
