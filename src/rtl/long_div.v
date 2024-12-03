@@ -16,36 +16,68 @@ output [31:0] ld_out;
 
 	//Implement long division module
 
+	parameter IDLE = 2'd0;
+	parameter CALC = 2'd1;
+	parameter DONE = 2'd2;
+
 	reg md_end_reg;
 	reg [31:0] ld_out_reg;
 
 	assign md_end = md_end_reg;
 	assign ld_out = ld_out_reg;
 
-	reg next_md_end;
-	reg next_ld_out;
+	reg [1:0] state;
 
 	reg [95:0] dividend;
-	reg [31:0] remainder;
+	reg [95:0] divisor;;
+	
+	reg [7:0] calc_iter;
 
 	always @(posedge clk) begin
 		if(!rstn) begin
-			md_end_reg <= 0;
-			ld_out_reg <= 0;
+			state <= IDLE;
 		end
 		else begin
-			md_end_reg <= next_md_end;
-			ld_out_reg <= next_ld_out;
+			case(state)
+				IDLE: begin
+					if(md_start) begin
+						dividend <= {64'd0, num_in} << len;
+						divisor <= {64'd0, modulus} << (96 - len);
+						calc_iter <= 96 - len;
+						state <= CALC;
+					end
+				end
+				CALC: begin
+					if(dividend >= divisor)
+						dividend <= dividend - divisor;
+
+					if(calc_iter != 0) begin
+						divisor <= divisor >> 1;
+						calc_iter <= calc_iter - 1;
+						state <= CALC;
+					end
+					else begin
+						state <= DONE;
+					end
+				end
+				DONE: begin
+					state <= IDLE;
+				end
+				default: begin
+					state <= IDLE;
+				end
+			endcase
 		end
 	end
 
 	always @(*) begin
-		if(md_start) begin
-			dividend = num_in << len;
+		if(state == DONE) begin
+			md_end_reg = 1;
+			ld_out_reg = dividend[31:0];
 		end
 		else begin
-			next_md_end = 0;
-			next_ld_out = 0;
+			md_end_reg = 0;
+			ld_out_reg = 0;
 		end
 	end
 
