@@ -27,9 +27,10 @@ output [31:0] ld_out;
 	assign ld_out = ld_out_reg;
 
 	reg [1:0] state;
+	reg [1:0] next_state;
 
 	reg [95:0] dividend;
-	reg [95:0] divisor;;
+	reg [95:0] divisor;
 	
 	reg [7:0] calc_iter;
 
@@ -38,36 +39,40 @@ output [31:0] ld_out;
 			state <= IDLE;
 		end
 		else begin
-			case(state)
-				IDLE: begin
-					if(md_start) begin
-						dividend <= {64'd0, num_in} << len;
-						divisor <= {64'd0, modulus} << (96 - len);
-						calc_iter <= 96 - len;
-						state <= CALC;
-					end
-				end
-				CALC: begin
-					if(dividend >= divisor)
-						dividend <= dividend - divisor;
+			if(state == CALC) begin
+				if(dividend >= divisor)
+					dividend <= dividend - divisor;
 
-					if(calc_iter != 0) begin
-						divisor <= divisor >> 1;
-						calc_iter <= calc_iter - 1;
-						state <= CALC;
-					end
-					else begin
-						state <= DONE;
-					end
+				if(calc_iter != 0) begin
+					divisor <= divisor >> 1;
+					calc_iter <= calc_iter - 1;
 				end
-				DONE: begin
-					state <= IDLE;
-				end
-				default: begin
-					state <= IDLE;
-				end
-			endcase
+			end
+			state <= next_state;
 		end
+	end
+
+	always @(*) begin
+		case(state)
+			IDLE: begin
+				if(md_start) begin
+					next_state = CALC;
+					dividend = {64'd0, num_in} << len;
+					divisor = {64'd0, modulus} << (96 - len);
+					calc_iter = 96 - len;
+				end
+			end
+			CALC: begin
+				if(calc_iter == 0)
+					next_state = DONE;
+			end
+			DONE: begin
+				next_state = IDLE;
+			end
+			default: begin
+				next_state = IDLE;
+			end
+		endcase
 	end
 
 	always @(*) begin
