@@ -28,7 +28,7 @@ module long_div_tb;
 
     // ====== Clock Generation: 10ns Period ======
     initial begin
-        clk = 0;
+        clk = 1;
         forever #5 clk = ~clk; // Clock period of 10ns (100MHz)
     end
 
