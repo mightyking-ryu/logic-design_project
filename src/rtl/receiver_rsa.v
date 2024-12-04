@@ -56,7 +56,7 @@ module receiver_rsa(
                 end
                 RL1: begin
                     if(rl_end) begin
-                        v <= rl_result;
+                        v_reg <= rl_result;
 
                         rl_start <= 1;
                         rl_base <= x_reg;
@@ -70,10 +70,10 @@ module receiver_rsa(
                 end
                 RL2: begin
                     if(rl_end) begin
-                        if((v + rl_result) >= N_reg)
-                            v <= v + rl_result - N_reg;
+                        if((v_reg + rl_result) >= N_reg)
+                            v_reg <= v_reg + rl_result - N_reg;
                         else
-                            v <= v + rl_result;
+                            v_reg <= v_reg + rl_result;
 
                         state <= DONE;
                     end
@@ -87,7 +87,7 @@ module receiver_rsa(
                 end
                 default: begin
                     rl_start <= 0;
-                    state <= IDLE
+                    state <= IDLE;
                 end
             endcase
         end
