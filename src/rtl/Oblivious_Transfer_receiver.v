@@ -225,7 +225,7 @@ module Oblivious_Transfer_receiver(
                 end
                 OUT: begin
                     if(variable_count == 1) begin
-                        if(tx_ready) begin
+                        if(tx_ready && tx_valid_reg == 0) begin
                             tx_valid_reg <= 1;
                             case(byte_count)
                                 3: begin
