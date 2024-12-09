@@ -52,7 +52,7 @@ module long_div_tb;
         modulus = 32'd11;
         len = 8'd4;         // R = 2^4 = 16
         md_start = 1;      // Start the operation
-        #10;
+        #15;
         md_start = 0;      // Deactivate start signal
 
         // Wait for Operation to Complete
@@ -69,7 +69,7 @@ module long_div_tb;
         modulus = 32'd7;
         len = 8'd3;         // R = 2^3 = 8
         md_start = 1;
-        #10;
+        #15;
         md_start = 0;
 
         wait (md_end == 1);
@@ -85,7 +85,7 @@ module long_div_tb;
         modulus = 32'd5;
         len = 8'd3;         // R = 2^3 = 8
         md_start = 1;
-        #10;
+        #15;
         md_start = 0;
 
         wait (md_end == 1);
@@ -101,7 +101,7 @@ module long_div_tb;
         modulus = 32'd13;
         len = 8'd4;         // R = 2^4 = 16
         md_start = 1;
-        #10;
+        #15;
         md_start = 0;
 
         wait (md_end == 1);
@@ -117,7 +117,7 @@ module long_div_tb;
         modulus = 32'd1;
         len = 8'd1;         // R = 2^1 = 2
         md_start = 1;
-        #10;
+        #15;
         md_start = 0;
 
         wait (md_end == 1);
@@ -133,7 +133,7 @@ module long_div_tb;
         modulus = 32'd0;
         len = 8'd0;         // R = 2^0 = 1
         md_start = 1;
-        #10;
+        #15;
         md_start = 0;
 
         wait (md_end == 1);
@@ -149,7 +149,7 @@ module long_div_tb;
         modulus = 32'd10;
         len = 8'd4;         // R = 2^4 = 16
         md_start = 1;
-        #10;
+        #15;
         md_start = 0;
 
         wait (md_end == 1);
@@ -165,7 +165,7 @@ module long_div_tb;
         modulus = 32'd15;
         len = 8'd4;         // R = 2^4 = 16
         md_start = 1;
-        #10;
+        #15;
         md_start = 0;
 
         wait (md_end == 1);
