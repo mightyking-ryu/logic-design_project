@@ -21,6 +21,11 @@ module unpack_mod(
     reg [31:0] m_prime_reg, N_reg;
     reg [31:0] m_reg;
 
+    reg [31:0] unpack_res_reg;
+    reg gen_end_reg;
+    assign unpack_res = unpack_res_reg;
+    assign gen_end = gen_end_reg;
+
     reg rl_start;
     reg [31:0] rl_base, rl_exp;
     wire [31:0] rl_result;
@@ -98,12 +103,12 @@ module unpack_mod(
 	
     always @(*) begin
         if(state == DONE) begin
-            unpack_res = m_reg;
-            gen_end = 1;
+            unpack_res_reg = m_reg;
+            gen_end_reg = 1;
         end
         else begin
-            unpack_res = 0;
-            gen_end = 0;
+            unpack_res_reg = 0;
+            gen_end_reg = 0;
         end
     end
        
