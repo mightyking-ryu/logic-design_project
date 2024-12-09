@@ -37,6 +37,7 @@
 # Project-specific Vivado files
 *.xpr
 *.lpr
+*.hw
 
 # Bitstream and binary files
 *.bit
