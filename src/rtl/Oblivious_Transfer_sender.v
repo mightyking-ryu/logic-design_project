@@ -196,15 +196,17 @@ module Oblivious_Transfer_sender(
                             end
                             8'd15: begin
                                 tx_data_reg <= x1[31:24]; 
-                                idx <= 0; 
-                                state <= RECV; 
-                                rx_ready_reg <= 1'b1; 
-                                idx <= 0;
+                                idx <= idx + 1;
                             end
                         endcase
                     end
                     else begin
                         tx_valid_reg <= 1'b0;
+                        if(idx == 8'd16) begin
+                            state <= RECV;
+                            rx_ready_reg <= 1'b1; 
+                            idx <= 0;
+                        end
                     end
                 end
                 RECV: begin
@@ -249,7 +251,7 @@ module Oblivious_Transfer_sender(
                 SEND2: begin
                     // if (cycle_count == 4'b1111) cycle_count <= 4'b0000;
                     // else cycle_count <= cycle_count + 1;
-                    if (tx_ready) begin
+                    if (tx_ready && tx_valid_reg == 0) begin
                         tx_valid_reg <= 1'b1;
                         case(idx)
                             8'd0: begin
@@ -282,12 +284,16 @@ module Oblivious_Transfer_sender(
                             end
                             8'd7: begin
                                 tx_data_reg <= packed_data1_reg[31:24]; 
-                                idx <= 0; state <= IDLE;
+                                idx <= idx + 1;
                             end
                         endcase
                     end
                     else begin
                         tx_valid_reg <= 1'b0;
+                        if(idx == 8'd8) begin
+                            idx <= 0;
+                            state <= IDLE;
+                        end
                     end
                 end
 
