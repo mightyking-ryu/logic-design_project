@@ -46,7 +46,7 @@ always @(posedge clk) begin
                 end
             end
             CALC: begin
-                if(dividend_reg > divisor_reg)
+                if(dividend_reg >= divisor_reg)
                     dividend_reg <= dividend_reg - divisor_reg;
 
                 if(bit_count == 31) begin
