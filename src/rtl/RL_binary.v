@@ -11,25 +11,35 @@ module mont_mul_combined(
 	output reg [31:0] mod,
 	output reg md_end
 );
+	reg [31:0] a_reg;
+	reg [31:0] b_reg;
+	reg [31:0] n_reg;
 	reg get_length_start;
 	wire [7:0] len;
+	reg [7:0] len_reg;
 	wire get_length_end;
 	wire get_long_div1_end;
 	wire [31:0] long_div_out1;
+	reg [31:0] long_div_out1_reg;
 	wire get_long_div2_end;
 	wire [31:0] long_div_out2;
+	// reg [31:0] long_div_out2_reg;
 	wire get_long_div_end;
-	assign get_long_div_end = get_long_div1_end & get_long_div2_end;
 	wire mont_mul_end1;
 	wire [31:0] mont_mul_out1;
+	reg [31:0] mont_mul_out1_reg;
 	wire mont_mul_end2;
 	wire [31:0] mont_mul_out2;
+	// reg [31:0] mont_mul_out2_reg;
+
+	
+
 
 	get_length get_length_m(
 		.clk(clk),
 		.rstn(rstn),
 		.md_start(get_length_start),
-		.num_in({32'b0,n}),
+		.num_in({32'b0,n_reg}),
 		.len_out(len), // output
 		.md_end(get_length_end) // output
 	);
@@ -38,29 +48,29 @@ module mont_mul_combined(
 		.rstn(rstn),
 		.md_start(get_length_end),
 		.len(len),
-		.num_in(a),
-		.modulus(n),
+		.num_in(a_reg),
+		.modulus(n_reg),
 		.md_end(get_long_div1_end), // output
 		.ld_out(long_div_out1) // output
 	);
 	long_div long_div_m2(
 		.clk(clk),
 		.rstn(rstn),
-		.md_start(get_length_end),
-		.len(len),
-		.num_in(b),
-		.modulus(n),
+		.md_start(get_long_div1_end),
+		.len(len_reg),
+		.num_in(b_reg),
+		.modulus(n_reg),
 		.md_end(get_long_div2_end), // output
 		.ld_out(long_div_out2) // output
 	);
 	mont_mult mont_mul_m1(
 		.clk(clk),
 		.rstn(rstn),
-		.md_start(get_long_div_end),
-		.len(len),
-		.num_1(long_div_out1),
+		.md_start(get_long_div2_end),
+		.len(len_reg),
+		.num_1(long_div_out1_reg),
 		.num_2(long_div_out2),
-		.modulus(n),
+		.modulus(n_reg),
 		.md_end(mont_mul_end1), // output
 		.mm_out(mont_mul_out1) // output
 	);
@@ -68,13 +78,17 @@ module mont_mul_combined(
 		.clk(clk),
 		.rstn(rstn),
 		.md_start(mont_mul_end1),
-		.len(len),
+		.len(len_reg),
 		.num_1(mont_mul_out1),
 		.num_2(32'b1),
-		.modulus(n),
+		.modulus(n_reg),
 		.md_end(mont_mul_end2), // output
 		.mm_out(mont_mul_out2) // output
 	);
+	always @(posedge clk) begin
+		if (get_long_div1_end) long_div_out1_reg <= long_div_out1;
+		if (get_length_end) len_reg <= len;
+	end
 	always @(posedge clk) begin
 		if (!rstn) begin
 			md_end <= 1'b0;
@@ -82,6 +96,10 @@ module mont_mul_combined(
 		end
 		else begin
 			if (md_start) begin
+				a_reg <= a;
+				b_reg <= b;
+				n_reg <= n;
+
 				get_length_start <= 1'b1;
 			end
 			else begin
