@@ -85,7 +85,7 @@ module Oblivious_Transfer_receiver(
     unpack_mod   u_unpack_mod(
         .clk        ( clk ),
         .rstn       ( !reset ),
-        .sel_bit    ( sel_bit ),
+        .sel_bit    ( sel_reg ),
         .gen        ( up_start ),
         .message0   ( m0_prime_reg ),
         .message1   ( m1_prime_reg ),
