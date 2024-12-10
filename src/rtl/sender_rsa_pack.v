@@ -12,7 +12,7 @@ module sender_rsa_pack(
 
     //You will need to use RL binary module
     //Use other modules if needed.
-    reg [1:0] state;
+    reg [2:0] state;
     reg [31:0] message0_reg;
     reg [31:0] message1_reg;
     reg [31:0] N_reg;
@@ -73,15 +73,11 @@ module sender_rsa_pack(
                         rand_val0_reg <= rand_val0;
                         rand_val1_reg <= rand_val1;
                         received_data_reg <= received_data;
-                        goto_COMP1 <= 1'b1;
-                    end
-                    else if (goto_COMP1) begin
                         state <= COMP1;
-                        goto_COMP1 <= 1'b0;
                         md_start <= 1'b1;
-                        base <= received_data_reg > rand_val0_reg ? received_data_reg - rand_val0_reg : rand_val0_reg - received_data_reg; // abs value
-                        exp <= d_reg;
-                        modulus <= N_reg;
+                        base <= received_data > rand_val0 ? received_data - rand_val0 : rand_val0 - received_data; // abs value
+                        exp <= d;
+                        modulus <= N;
                     end
                     else begin
                         md_start <= 1'b0;
