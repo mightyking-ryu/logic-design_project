@@ -24,37 +24,38 @@ module uart_transmitter (
         else begin
             case (state)
                 IDLE: begin
-                    RsTx <= 1;
-                    ready_reg <= 1;
                     clk_count <= 4'b0;
                     data_count <= 3'b0;
                     if (valid == 1 && ready == 1) begin
-                        state <= XMIT;
-                        xmit_save <= data_to_xmit;
+                        RsTx <= 0;
                         ready_reg <= 0;
+
+                        xmit_save <= data_to_xmit;
+                        state <= XMIT;                        
+                    end
+                    else begin
+                        RsTx <= 1;
+                        ready_reg <= 1;
                     end
                 end
                 XMIT: begin
                     clk_count <= clk_count + 1;
                     if (clk_count == 4'b1111) begin
-                        if (data_count == 4'b0000) begin
-                            RsTx <= 0;
+                        if (data_count == 4'b1000) begin
+                            RsTx <= 1;
                             data_count <= data_count + 1;
                         end
                         else if (data_count == 4'b1001) begin
                             RsTx <= 1;
-                            data_count <= data_count + 1;
-                            state <= END_XMIT;
+                            ready_reg <= 1;
+
+                            state <= IDLE;
                         end
                         else begin
-                            RsTx <= xmit_save[data_count - 1];
+                            RsTx <= xmit_save[data_count];
                             data_count <= data_count + 1;
                         end
                     end
-                end
-                END_XMIT: begin
-                    RsTx <= 1;
-                    state <= IDLE;
                 end
             endcase
         end
