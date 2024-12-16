@@ -15,7 +15,7 @@ module clock_divider (
             //if (counter == 27'd49_999_999) begin
 
             //Use this at simulation
-            if (counter == 27'd27) begin
+            if (counter == 27'd26) begin
                 counter <= 26'd0;
                 slow_clk_reg <= ~slow_clk_reg;
             end 
