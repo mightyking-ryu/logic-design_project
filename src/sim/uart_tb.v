@@ -23,7 +23,7 @@ module uart_tb ();
     
 
 
-    reg [7:0] msg [4:0];
+    reg [7:0] msg [12:0];
     integer bit_count = 0;
     integer data_count = 0;
     
@@ -48,34 +48,41 @@ module uart_tb ();
     initial begin
         #5500;
         uart_start = 5500 + $random%5000;
-        
+
         msg[0] = "H";
         msg[1] = "e";
         msg[2] = "l";
         msg[3] = "l";
         msg[4] = "o";
+        msg[5] = ",";
+        msg[6] = " ";
+        msg[7] = "w";
+        msg[8] = "o";
+        msg[9] = "r";
+        msg[10] = "l";
+        msg[11] = "d";
+        msg[12] = "!";
 
         //Random UART Rx start
         while ($time < (uart_start)) begin
             #1;
         end
 
-        while (data_count < 5) begin
+        while (data_count < 13) begin
             //Send start bit
             RsRx = 1'b0;
-            #8816;
+            #8640;
             while (bit_count < 7) begin
                 RsRx = msg[data_count][bit_count];
-                #8816;
+                #8640;
                 bit_count = bit_count + 1;
             end
             RsRx = msg[data_count][7];
-            #8816;
+            #8640;
             RsRx = 1'b1;
-            #8816;
+            #8640;
             bit_count = 0;
             data_count = data_count + 1;
-            
         end
         
 
@@ -100,18 +107,19 @@ module uart_tb ();
             @(negedge RsTx);
             #30;
             data_count_fpga = 0;
-            #8816;#8816;
+            #4320;
+            #8640;
             while (data_count_fpga != 7) begin
                 data_sent_by_fpga[data_count_fpga] = RsTx;
                 data_count_fpga = data_count_fpga + 1;
-                #8816;
+                #8640;
             end
             data_sent_by_fpga[data_count_fpga] = RsTx;
 
             $display("0x%x  %c", data_sent_by_fpga, data_sent_by_fpga);
 
             data_returned = data_returned + 1;
-            if (data_returned == 5) begin
+            if (data_returned == 13) begin
                 $display("[*]The simulation is complete. check waveforms");
                 $stop;
             end
