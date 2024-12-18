@@ -15,7 +15,7 @@ module Oblivious_Transfer_sender(
 
     //Implement sender side of oblivious transfer
     //You can define your own reg, wire ... etc
-    reg rstn;
+    // reg rstn;
     reg prng_gen0;
     reg prng_gen1;
     reg [31:0] prng_N0;
@@ -55,7 +55,7 @@ module Oblivious_Transfer_sender(
 
     pseudo_random RANDOM_GENERATOR_0(
         .clk  (clk),
-        .rstn (rstn),
+        .rstn (!reset),
         .gen  (prng_gen0),
         .N    (prng_N0),
         .q    (prng_q0),
@@ -64,7 +64,7 @@ module Oblivious_Transfer_sender(
 
     pseudo_random RANDOM_GENERATOR_1(
         .clk  (clk),
-        .rstn (rstn),
+        .rstn (!reset),
         .gen  (prng_gen1),
         .N    (prng_N1),
         .q    (prng_q1),
@@ -72,7 +72,7 @@ module Oblivious_Transfer_sender(
     );
     sender_rsa_pack SENDER_RSA (
         .clk           (clk),
-        .rstn          (rstn),
+        .rstn          (!reset),
         .gen           (rsa_gen),
         .message0      (message0),
         .message1      (message1),
@@ -101,17 +101,19 @@ module Oblivious_Transfer_sender(
     always @(posedge clk) begin
         if (reset) begin
             state <= IDLE;
-            rstn <= 1'b0;
+            // rstn <= 1'b0;
             prng_N0 <= 32'b1; // initial prng
             prng_N1 <= 32'b110; // initial prng
             N <= def_N;
             e <= def_e;
             d <= def_d;
+            rx_ready_reg <= 1;
+            tx_valid_reg <= 0;
         end
         else begin
             case(state)
                 IDLE: begin
-                    rstn <= 1'b1;
+                    // rstn <= 1'b1;
                     state <= PRNG;
                     prng_gen0 <= 1'b1;
                     prng_gen1 <= 1'b1;
