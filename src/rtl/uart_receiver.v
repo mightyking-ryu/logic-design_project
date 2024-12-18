@@ -34,7 +34,7 @@ module uart_receiver (
             case (state)
                 IDLE: begin
                     valid_reg <= 0;
-                    clk_count <= 4'b0;
+                    clk_count <= 4'd7;
                     data_count <= 3'b0;
                     if (RsRx == 0) begin
                         state <= RECEIVING;
@@ -43,13 +43,16 @@ module uart_receiver (
                 RECEIVING: begin
                     clk_count <= clk_count + 1;
                     if (clk_count == 4'b1111) begin
-                        if (data_count == 4'b1000) begin
+                        if (data_count == 4'b1001) begin
                             state <= WAIT;
                             data_count <= 4'b0;
                             valid_reg <= 1'b1;
                         end
+                        else if (clk_count == 4'b0000) begin
+                            data_count <= data_count + 1;
+                        end
                         else begin
-                            received_data[data_count] <= RsRx;
+                            received_data[data_count - 1] <= RsRx;
                             data_count <= data_count + 1;
                         end
                     end
